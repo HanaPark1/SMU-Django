@@ -21,4 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('students/', include('students.urls')), #students app에 있는 urls.py 연결
+    path('', include('index.urls')) #root
 ]

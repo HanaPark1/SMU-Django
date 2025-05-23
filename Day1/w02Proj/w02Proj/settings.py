@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'students.apps.StudentsConfig', # app 등록 - 서버 구동 
-    'students' # app 등록 - 서버 구동 
+    'students', # app 등록 - 서버 구동 
+    'index',
 ]
 
 MIDDLEWARE = [
