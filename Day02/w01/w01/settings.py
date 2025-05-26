@@ -23,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9&2=2j-=gpbk9lqtvkcv5(&0t91)4=wng(w3aj-21r^4&e(8$u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # 테스트 상태
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [] # 실제 웹서버 IP 세팅 후에 DEBUG = False로 설정
 
 # Application definition
 
@@ -37,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'students'
+    'students',
+    'home',
 ]
 
 MIDDLEWARE = [
