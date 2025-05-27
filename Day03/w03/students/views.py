@@ -7,5 +7,6 @@ def list(request):
     pw = request.POST.get('pw')
     gender = request.POST.get('gender')
     tel = request.POST.get('tel')
-    context = {"id":id, "pw":pw, "gender":gender,'tel':tel}
+    hobbys = request.POST.getlist("hobby")
+    context = {"id":id, "pw":pw, "gender":gender,'tel':tel,'hobby':hobbys}
     return render(request, 'list.html', context)
