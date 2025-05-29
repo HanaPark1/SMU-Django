@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+# 1. import os
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +31,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+# 2. 앱등록
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -107,6 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
+# 3. 언어 / 시간 설정
 LANGUAGE_CODE = 'ko-kr'
 
 TIME_ZONE = 'asia/Seoul'
@@ -119,6 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+# 4.static 등록
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = (
