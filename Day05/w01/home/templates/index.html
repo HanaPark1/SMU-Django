@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <li><a href="/admin/">관리자페이지</a></li>
+    <li><a href="/students/list/">리스트페이지</a></li>
+    {#html href : / | ./ | ../#}
+    {#html -> server 1.파라미터 2.우아한url (restapi)#}
+    <li><a href="/students/list/?name=1/">파라미터전달</a></li>
+    <li><a href="/students/list/1/">api방식전달</a></li>
+</body>
+</html>
