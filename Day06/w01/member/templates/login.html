@@ -22,7 +22,8 @@
   </header>
 
   <nav>
-    <div class="logo"></div>
+    <a href="/"><div class="logo"></div></a>
+    
 
     <div id="search">
       <div class="search"></div><br>
@@ -55,7 +56,8 @@
       </ul>  
     </article>
 
-    <form action="/login" name="login" method="post">
+    <form action="/member/login/" name="login" method="post">
+      {% csrf_token %}
       <div class="id">
         <input type="text" name="id" size="30" placeholder="CJ ONE 통합아이디 6~20자">
       </div>
@@ -132,3 +134,15 @@
   </footer>
 </body>
 </html>
+<script>
+  if ({{msg}} == 0) {
+    alert('아이디가 존재하지 않습니다. 회원가입을 해 주세요.')
+  }
+  else if ({{msg}} == 1){
+    alert('반갑습니다.');
+    location.href = '/';
+  }
+  else if ({{msg}} == -1){
+    alert('패스워드가 일치하지 않습니다. 다시 로그인해 주세요.');
+  }
+</script>

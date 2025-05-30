@@ -12,8 +12,19 @@
 	 	<header>
 	 		<div id="nav_up">
 	 			<ul>
+					{%if not request.session.session_id%}
 	 				<li>회원가입</li>
 	 				<li><a href="/member/login/">로그인</a></li>
+					{%else%}
+					<li>{{request.session.session_id}}님</li>
+	 				<li><a href="#" onclick='logoutBtn()' >로그아웃</a></li>
+					<script>
+						function logoutBtn() {
+							alert('로그아웃되었습니다.')
+							location.href = "/member/logout/"
+						}
+					</script>
+					{%endif%}
 	 				<li>고객행복센터</li>
 	 				<li>배송정보검색</li>
 	 				<li>기프트카드 등록</li>
