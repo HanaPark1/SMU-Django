@@ -17,11 +17,10 @@
 	 				<li><a href="/member/login/">로그인</a></li>
 					{%else%}
 					<li>{{request.session.session_id}}님</li>
-	 				<li><a href="#" onclick='logoutBtn()' >로그아웃</a></li>
+	 				<li><a href="/member/logout/" onclick='logoutBtn()' >로그아웃</a></li>
 					<script>
 						function logoutBtn() {
 							alert('로그아웃되었습니다.')
-							location.href = "/member/logout/"
 						}
 					</script>
 					{%endif%}
