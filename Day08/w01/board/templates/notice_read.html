@@ -78,7 +78,7 @@
     </table>
 
     <div class="list"><a href="{% url "board:reply" board.bno %}">답글 달기</a></div>
-    <div class="list"><a href="{% url "board:list" %}">목록</a></div>
+    <a href='{% url "board:list" %}?category={{category}}&search={{search}}'><div class="list">목록</div></a>
     <div class="list" onclick='deleteBtn()'>삭제</div>
     <a href='{% url "board:update" board.bno %}'><div class="list">수정</div></a>
   </section>

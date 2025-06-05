@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from board.models import Board
-from django.db.models import F
+# F함수사용 - filter검색된 필드에서 특정컬럼의 값을 가져오는 함수
+# Q함수 사용 - AND OR NOT 연산자 사용
+from django.db.models import F, Q
+from django.core.paginator import Paginator
 
 # 게시글쓰기 - 게시글페이지열기, 게시글저장
 def write(request):
@@ -29,20 +32,59 @@ def view(request,bno):
     # qs.bhit += 1
     # qs.save()
     # context = {'board':qs}
+    category = request.GET.get('category','')
+    search = request.GET.get('search','')
     
     # 2.F함수사용 - filter검색후, 특정컬럼의 값을 가져오는 함수
     qs = Board.objects.filter(bno=bno) # 리스트
     qs.update(bhit = F('bhit')+1) #save까지 됨.
-    context = {'board':qs[0]}
+    context = {'board':qs[0],'category':category,'search':search}
     
     return render(request,'notice_read.html',context)
 
-# 게시판리스트
+# 게시판리스트 (일반 게시판리스트, 검색 게시판리스트)
 def list(request):
-    # 게시글 전체 가져오기
-    qs = Board.objects.order_by('-bgroup','bstep')
-    context = {"list":qs}
-    return render(request,'notice_list.html',context)
+    # 현재 페이지
+    page = int(request.GET.get('page',1)) # 없을때, 1페이지로 넘겨줌
+    #search
+    search = request.GET.get('search','') 
+    category = request.GET.get('category','')
+    print('검색데이터 : ',category,search)
+    
+    if search == '':  # 일반리스트로 넘어온 경우
+        # 게시글 전체 가져오기
+        qs = Board.objects.order_by('-bgroup','bstep')
+        # 페이지 분기
+        paginator = Paginator(qs,20) # 100개 -> 10개씩 쪼개서 전달해줌.
+        list = paginator.get_page(page)  # 현재페이지에 해당되는 게시글 전달
+        context = {"list":list,'page':page}
+        return render(request,'notice_list.html',context)
+    else:            
+        # 검색으로 넘어온 경우
+        # 게시글 전체 가져오기
+        if category == 'btitle':
+            qs = Board.objects.filter(btitle__contains=search)
+        elif category == 'bcontent':
+            qs = Board.objects.filter(bcontent__contains=search)
+        elif category == 'all':
+            qs = Board.objects.filter(Q(bcontent__contains=search) | Q(btitle__contains=search))
+
+        # 페이지 분기
+        paginator = Paginator(qs,20) # 100개 -> 10개씩 쪼개서 전달해줌.
+        list = paginator.get_page(page)  # 현재페이지에 해당되는 게시글 전달
+        context = {"list":list,'page':page, 'search':search, 'category':category}
+        return render(request,'notice_list.html',context)
+
+# def search(request):
+#     if request.method == 'POST' :
+#         category = request.POST.get('search')
+#         keyword = request.POST.get('search')
+#         if category == 'btitle':
+#             q = Board.objects.filter(btitle__contains=keyword)
+#         elif category == 'bcontent':
+#             q = Board.objects.filter(bcontent__contains = keyword)
+#         print(q)
+#         return render(request, 'notice.list.html')
 
 def update(request,bno):
     qs = Board.objects.get(bno=bno)
