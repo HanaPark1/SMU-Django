@@ -13,7 +13,7 @@ class Board(models.Model):
     bindent = models.IntegerField(default=0) #들여쓰기
     # --- 
     bhit = models.IntegerField(default=0)
-    bfile = models.CharField(max_length=100, null=True, blank=True)
+    bfile = models.ImageField(upload_to='board', null=True, blank=True)
     bdate = models.DateTimeField(auto_now=True)
     
     def __str__(self):

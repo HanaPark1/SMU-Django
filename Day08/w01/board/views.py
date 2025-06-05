@@ -14,8 +14,9 @@ def write(request):
         id = request.POST.get('id') #섹션에서 가져옴.
         btitle = request.POST.get('btitle')
         bcontent = request.POST.get('bcontent')
-        bfile = request.POST.get('bfile')
-        print('write 가져온 데이터 : ',id,btitle,bcontent,bfile)
+        bfile = request.FILES.get('bfile','')
+        print('파일부분 :', request.FILES)
+        print('bfile 가져온 데이터 : ', bfile)
         # 1.save() 저장
         # Board(id=id,btitle=btitle,bcontent=bcontent,bfile=bfile).save()
         # 2.create저장
@@ -95,10 +96,17 @@ def update(request,bno):
         id = request.POST.get('id')
         btitle = request.POST.get('btitle')
         bcontent = request.POST.get('bcontent')
-        bfile = request.POST.get('bfile')
+        bfile_pre = request.POST.get('bfile_pre', '')
+        bfile = request.FILES.get('bfile','')
+        if not bfile:
+            print('흠..... if문 돌아가는중')
+            bfile = bfile_pre
+            
+        print('새로운 파일:', bfile)
+        print('원래 파일:', bfile_pre)
         
         qs.id = id
-        qs.btible = btitle
+        qs.btitle = btitle
         qs.bcontent = bcontent
         qs.bfile = bfile
         qs.save()
@@ -122,7 +130,7 @@ def reply(request, bno):
         bindent = int(request.POST.get('bindent'))
         btitle = request.POST.get('btitle')
         bcontent = request.POST.get('bcontent')
-        bfile = request.POST.get('bfile')
+        bfile = request.FILES.get('bfile')
         
         # 모든 자식들은 전부 bstep을 1씩 증가시켜야 함
         # 부모보다 bstep 더 큰것은 전부 bstep 1씩 증가 gt,lt,gte,lte

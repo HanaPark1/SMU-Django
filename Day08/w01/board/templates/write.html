@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>글쓰기</title>Add commentMore actions
+  <title>글쓰기</title>
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700,900&display=swap&subset=korean" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css'%}">
   <link rel="stylesheet" href="{% static 'css/write.css'%}">
-  <script>Add commentMore actions
+  <script>
      if('{{msg}}' == '1'){
       alert('글쓰기가 완료되었습니다.');
       location.href = '/board/list/';
@@ -66,7 +66,7 @@
     <h1>관리자 글쓰기</h1>
     <hr>
 
-    <form action="/board/write/" name="write" method="post">
+    <form action="/board/write/" name="write" method="post" enctype='multipart/form-data'>
       {% csrf_token %}
       <table>
         <colgroup>
