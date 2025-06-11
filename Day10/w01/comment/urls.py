@@ -3,5 +3,5 @@ from . import views
 
 app_name = 'comment'
 urlpatterns = [
-    path('list/', views.list, name='list'),
+    path('cwrite/', views.cwrite, name='cwrite'),
 ]

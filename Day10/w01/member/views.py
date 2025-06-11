@@ -24,6 +24,7 @@ def login(request):
         try:
             qs = Member.objects.get(id=id,pw=pw)
             request.session['session_id'] = id #session id를 추가
+            request.session['session_name'] = qs.name #session name를 추가
             msg = 1
         except: print('데이터가 없습니다.')    
         ## 쿠키 읽어오기

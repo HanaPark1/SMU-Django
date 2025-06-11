@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.db.models import F,Q #F: 검색된 모든 데이터 적용 | Q: 쿼리
 from board.models import Board
+from comment.models import Comment
 
 ## 게시판리스트
 def list(request):
@@ -30,6 +31,7 @@ def write(request):
         qs = Board.objects.create(id=id,btitle=btitle,bcontent=bcontent,bfile=bfile,ntchk=ntchk)
         return redirect('/board/list/')
     
+# 글 상세보기 - 하단댓글포함
 def view(request, bno):
     # 현재글
     qs = Board.objects.filter(bno=bno)
@@ -47,6 +49,11 @@ def view(request, bno):
     print('현재글 : ',qs[0].bno)
     print('이전글 : ',pre_qs.bno)
     print('다음글 : ',next_qs.bno)
-    context = {'board':qs[0],'pre_board':pre_qs,'next_board':next_qs}
     
+    # 하단댓글
+    c_qs = Comment.objects.filter(board = qs[0]).order_by('-cno')
+    print("하단 댓글 데이터: c_qs", c_qs)
+    
+    
+    context = {'board':qs[0],'pre_board':pre_qs,'next_board':next_qs, 'comment':c_qs}
     return render(request, 'board/view.html', context)
