@@ -27,3 +27,9 @@ def cwrite(request):
 
     
     return JsonResponse(context)
+
+def cdelete(request):
+    cno = request.POST.get('cno')
+    print('하단 댓글 번호: ', cno)
+    context = {'result': 'success'}
+    JsonResponse(context)
