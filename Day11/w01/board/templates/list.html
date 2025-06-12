@@ -4,74 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name='csrf-token' content='{{csrf_token}}'>
-    <title>Document</title>
+    <title>form 게시판</title>
     <style> div{width: 200px; height: 100px; border: 1px solid black; font-size:20px; text-align:center;}
     </style>
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        
-        $(function(){
-            $('.ajaxBtn').click(function(){
-                alert('ajaxBtn 버튼이 눌렸습니다.');
-                let id = $('.id').val();
-                let name = $('.name').val();
-                let csrfToken = $("meta[name='csrf-token']").attr('content');
-                console.log(id);
-                console.log(name);
-                console.log(csrfToken);
-
-                $.ajax({
-                    url: '/board/view2/',
-                    type: 'post',
-                    headers: {'X-CSRFToken': csrfToken},
-                    data: {'id':id, 'name':name},
-                    success:function(data){
-                        alert('성공');
-                        console.log('전송된 데이터',data);
-                        let hdata = ``;
-                        hdata += `<h4>아이디 : ${data.id}</h4>`;
-                        hdata += `<h4>이름 : ${data.name}</h4>`;
-                        hdata += `<h4>결과 : ${data.result}</h4>`;
-                        hdata += `<h4>비밀번호 : ${data.pw}</h4>`;
-                        //html있는 위치 값을 넣어줘야 함.
-                        $(".pw").prepend(hdata);
-
-                        //html 있는 위치 값을 넣어줘야 함
-                        $('.pw').prepend(data.pw)
-                    }, error:function(){
-                        alert('실패');
-                    }
-                }) // ajax선언
-                
-            })//ajaxBtn 클릭
-        })// 제이쿼리선언
-    </script>
+    <style>
+        table {
+            margin: 10px auto;
+            width: 1200px
+            
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collaspe: collaspe;
+        }
+        th,td {
+            height: 40px;
+            width: 120px;
+            text-align: center;
+        }
+        textarea {
+            width: 400px;
+            height: 200px;
+        }
+    </style>
     
 </head>
 <body>
-    <h2>게시판리스트</h2>
-    <hr>
-    <h3>폼 데이터</h3>
-    <form action="/board/view/" method='post' name='frm'>
+    <h3><a href="/">1. 폼 데이터 - 파라미터</a></h3>
+    <form action="/board/list/" method='post' name='writefrm'>
         {% csrf_token %}
-        <label for="id">아이디</label>
-        <input type="text" name="id" id="id"><br>
-        <label for="name">이름</label>
-        <input type="text" name="name" id="name"><br>
-        <input type="submit" class='ajaxBtn' value="저장">
+        <label>아이디</label>
+        <input type="text" name="id"><br>
+        <label>제목</label>
+        <input type="text" name="btitle"><br>
+        <label>내용</label>
+        <textarea name="bcontent"></textarea><br>
+        <input type="submit" value="저장">
     </form>
     <hr>
-    <h3>ajax</h3>
-    
-    <label>아이디</label>
-    <input type="text" name="id" class="id"><br>
-    <label>이름</label>
-    <input type="text" name="name" class="name"><br>
-
-    <button type="button" class='ajaxBtn'>저장</button>
-    <div>결과: <span class='pw'></span></div>
-    <ul>
-        <li><a href="/board/view">보기</a></li>
-    </ul>
+    <table>
+        <colgroup>
+            <col width='12%'>
+            <col width='*'>
+            <col width='12%'>
+            <col width='12%'>
+            <col width='12%'>
+        </colgroup>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>조회수</th>
+            <th>작성일</th>
+        </tr>
+        <tbody id='tbody'>
+            {% for board in list %}
+            <tr>
+                <td>{{board.bno}}</td>
+                <td><a href="/board/view/?bno={{board.bno}}">{{board.btitle}}</a></td>
+                <td>{{board.id}}</td>
+                <td>{{board.bhit}}</td>
+                <td>{{board.bdate|date:'Y-m-d H:i:s'}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
 </body>
 </html>
