@@ -23,3 +23,10 @@ def bwrite(request):
     l_qs = list(Board.objects.filter(bno=qs.bno).values())
     context = {'result':'success', 'board':l_qs}
     return JsonResponse(context)
+
+def bdelete(request):
+    bno = request.POST.get('bno')
+    Board.objects.get(bno=bno).delete()
+    
+    context = {'result':'success'}
+    return JsonResponse(context)
