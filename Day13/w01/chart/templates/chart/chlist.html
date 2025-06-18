@@ -5,6 +5,7 @@
 <title> JARDIN SHOP </title>
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name='csrf-token' content={{ csrf_token }} />
 <meta name="description" content="JARDIN SHOP" />
 <meta name="keywords" content="JARDIN SHOP" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scaleable=no" />
@@ -13,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="/static/css/content.css?v=Y" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script type="text/javascript" src="/static/js/top_navi.js"></script>
 <script type="text/javascript" src="/static/js/left_navi.js"></script>
 <script type="text/javascript" src="/static/js/main.js"></script>
@@ -20,17 +22,6 @@
 <script type="text/javascript" src="/static/js/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="/static/js/idangerous.swiper-2.1.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.anchor.js"></script>
-<!--[if lt IE 9]>
-<script type="text/javascript" src="/static/js/html5.js"></script>
-<script type="text/javascript" src="/static/js/respond.min.js"></script>
-<![endif]-->
-<script type="text/javascript">
-$(document).ready(function() {
-	
-
-
-});
-</script>
 </head>
 <body>
 
@@ -213,14 +204,49 @@ $(document).ready(function() {
 					<h2><strong>CHART</strong><span>쟈뎅샵 소식을 전해드립니다.</span></h2>
 					
 					<div class="orderDivMt">
+						<!-- 차트 그리기 -->
 						<div>
-							<canvas id="myChart"></canvas>
-						</div>
+						  <canvas id="myChart"></canvas>
+						</div> 
 					</div>
 					<script>
 							alert("차트를 출력합니다.");
-							
+							let cToken = $('meta[name="csrf-token"]').attr('content');
+							let tSales = []; //월별매출액
+							let mon = [];    //월별이름
+							let pro = [];    //월별영업이익
+							console.log('cToken',cToken);
+							$.ajax({
+								url:'/chart/chajax/',
+								type:'post',
+								headers:{'X-CSRFToken':cToken},
+								data:{'test':'aaa'},
+								success:function(data){
+									alert('성공');
+									console.log('넘어온데이터 : ',data);
+									for(let i=0;i<data.ajaxlist.length;i++){
+										// 자바스크립트에서 배열에 데이터 추가명령어:push
+										tSales.push(data.ajaxlist[i].totalSales);
+										mon.push(data.ajaxlist[i].monthly);
+										pro.push(data.ajaxlist[i].profit);
+									}
+									console.log('월별매출액 : ',tSales);
+									console.log('월별이름 : ',mon);
+									console.log('월별영업이익 : ',pro);
+
+
+									//차트그리기
+									
+
+
+
+								},
+								error:function(){
+									alert('실패');
+								}
+							});//ajax선언
 							const ctx = document.getElementById('myChart');
+							console.log('영업이익 : ',{{profit}});
 
 							new Chart(ctx, {
 								type: 'bar',
@@ -228,7 +254,7 @@ $(document).ready(function() {
 								labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
 								datasets: [{
 									label: '2025년 월별 매출액',
-									data: [12, 19, 3, 5, 2, 3],
+									data: {{profit}},
 									borderWidth: 1
 								}]
 								},
@@ -241,9 +267,6 @@ $(document).ready(function() {
 								}
 							});
 					</script>
-
-
-					
 					<div class="searchWrap">
 						<div class="search">
 							<ul>
