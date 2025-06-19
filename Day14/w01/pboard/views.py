@@ -30,7 +30,7 @@ def list(request):
 
 # 공공데이터 가져오기 함수    
 def publicData():
-    public_key = ''
+    public_key = '%2FkR9HCv6YxY%2BIeqWi9UvUKEJOq%2BLYqmmG13nKO1%2BxTsnOnFq0Kfd4%2BwlGPwquoCQRfOXb14SqKhKucCRsv%2BeOw%3D%3D'
     pageNo = 1
     url = f'http://apis.data.go.kr/B551011/PhotoGalleryService1/galleryList1?serviceKey={public_key}&numOfRows=10&pageNo={pageNo}&MobileOS=ETC&MobileApp=AppTest&arrange=A&_type=json'
     # 웹스크래핑 requests
