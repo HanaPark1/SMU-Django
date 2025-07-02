@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: '3.9'
+
+services:
+  web:
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 socket_project.asgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=socket_project.settings
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
