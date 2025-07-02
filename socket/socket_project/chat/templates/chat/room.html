@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chat Room</title>
+</head>
+<body>
+    <textarea id="chat-log" cols="100" rows="20" readonly>
+        {% for msg in messages %}
+            {{ msg.message }}
+        {% endfor %}
+    </textarea><br />
+    
+    <input id="chat-message-input" type="text" size="100" disabled /><br />
+    <input id="chat-message-submit" type="button" value="Enter" disabled />
+</body>
+<script type="text/javascript">
+    let roomName = "{{ room_name | escapejs }}";
+
+    let chatSocket = new WebSocket(
+        `ws://${window.location.host}/ws/chat/${roomName}/`
+    );
+
+    // WebSocket 연결이 열리면 입력창과 버튼 활성화
+    chatSocket.onopen = function(e) {
+        document.querySelector("#chat-message-input").disabled = false;
+        document.querySelector("#chat-message-submit").disabled = false;
+        document.querySelector("#chat-message-input").focus();
+
+        // 초기 로딩 시 스크롤 맨 아래로 이동
+        let chatLog = document.querySelector("#chat-log");
+        chatLog.scrollTop = chatLog.scrollHeight;
+
+        console.log('WebSocket 연결이 열렸습니다.');
+    };
+
+    chatSocket.onmessage = function(e) {
+        let data = JSON.parse(e.data);
+        let message = data['message'];
+        let chatLog = document.querySelector("#chat-log");
+        chatLog.value += message + '\n';
+        chatLog.scrollTop = chatLog.scrollHeight; // 새 메시지 올 때마다 스크롤 아래로
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+        document.querySelector("#chat-message-input").disabled = true;
+        document.querySelector("#chat-message-submit").disabled = true;
+    };
+
+    chatSocket.onerror = function(e) {
+        console.error('WebSocket 에러:', e);
+    };
+
+    // Enter 키 입력 시 전송 버튼 클릭 처리
+    document.querySelector("#chat-message-input").addEventListener("keyup", function(e) {
+        if (e.key === "Enter") {
+            document.querySelector("#chat-message-submit").click();
+        }
+    });
+
+    // 전송 버튼 클릭 시 메시지 보내기 (연결 상태 확인)
+    document.querySelector("#chat-message-submit").addEventListener("click", function(e) {
+        let messageInputDom = document.querySelector("#chat-message-input");
+        let message = messageInputDom.value;
+
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        } else {
+            console.log('WebSocket 연결이 아직 열리지 않았습니다.');
+        }
+    });
+</script>
+</html>
